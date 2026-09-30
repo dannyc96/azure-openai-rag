@@ -44,6 +44,25 @@ jobs:
           directory: terraform
           framework: terraform
           quiet: true
+          # Demo-scope exceptions, each one deliberate:
+          # CKV_AZURE_134 / CKV_AZURE_124: public network access stays enabled
+          #   on OpenAI and AI Search. This is a public demo reachable from
+          #   laptops and CI; the data plane is still Entra-ID-only because
+          #   local auth (API keys) is disabled on both services. Private
+          #   endpoints are the production upgrade path and require the VNet
+          #   from the azure-landing-zone repo.
+          # CKV_AZURE_208 / CKV_AZURE_209: AI Search SLA checks require 2 to 3
+          #   replicas. The demo runs 1 replica on the basic tier to keep cost
+          #   near zero; scale replicas, not code, for production SLAs.
+          # CKV2_AZURE_22: customer-managed keys for Cognitive Services.
+          #   Microsoft-managed encryption at rest is appropriate here; CMK
+          #   adds a Key Vault + purge-protection dependency with no
+          #   threat-model benefit for sample documents.
+          # CKV_AZURE_247: data loss prevention. The account already sets
+          #   outbound_network_access_restricted = true with an empty FQDN
+          #   allowlist, which is stricter than any allowlist, but the check
+          #   only passes on a non-empty fqdns list. Checkov limitation.
+          skip_check: CKV_AZURE_134,CKV_AZURE_124,CKV_AZURE_208,CKV_AZURE_209,CKV2_AZURE_22,CKV_AZURE_247
 
   python:
     name: python

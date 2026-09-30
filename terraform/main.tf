@@ -50,6 +50,18 @@ resource "azurerm_cognitive_account" "openai" {
   # No API keys. Entra ID (managed identity or az login) is the only way in.
   local_auth_enabled = false
 
+  # Data loss prevention: the account makes no outbound calls of its own, so
+  # restrict outbound network access with an empty allowlist, which is the
+  # strictest possible posture.
+  outbound_network_access_restricted = true
+  fqdns                              = []
+
+  # A system-assigned identity so the account itself can authenticate to other
+  # Azure services if the architecture grows (e.g. On Your Data with storage).
+  identity {
+    type = "SystemAssigned"
+  }
+
   tags = var.tags
 }
 
@@ -104,6 +116,12 @@ resource "azurerm_search_service" "main" {
 
   # Semantic ranking, free tier covers a demo comfortably.
   semantic_search_sku = "free"
+
+  # System-assigned identity so the search service can reach other Azure
+  # resources (e.g. indexer data sources) without keys if the demo grows.
+  identity {
+    type = "SystemAssigned"
+  }
 
   tags = var.tags
 }
