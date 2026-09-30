@@ -1,0 +1,11 @@
+# Copy to terraform.tfvars and fill in. Nothing in this file is a secret:
+# object IDs and image names are identifiers, not credentials.
+
+# Required. Your Entra ID object ID, for local dev and ingestion:
+#   az ad signed-in-user show --query id -o tsv
+developer_object_id = "00000000-0000-0000-0000-000000000000"
+
+# Optional overrides.
+# prefix          = "nwrag"
+# location        = "swedencentral"
+# container_image = "ghcr.io/dannyc96/azure-openai-rag:latest"

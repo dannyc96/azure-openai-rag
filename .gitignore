@@ -1,0 +1,29 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform.tfvars.example
+*.tfplan
+crash.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Environment files (there should never be secrets in one anyway)
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/
